@@ -12,9 +12,9 @@
   - [Background \& Motivation](#background--motivation)
   - [Objectives](#objectives)
   - [Project Workflow](#project-workflow)
-  - [Project Structure](#project-structure)
+  - [Project Structure (assumed)](#project-structure-assumed)
   - [Installation](#installation)
-  - [Usage](#usage)
+  - [Usage (assumed)](#usage-assumed)
   - [Expected Results \& Analysis](#expected-results--analysis)
   - [Discussion \& Future Work](#discussion--future-work)
   - [Contributing](#contributing)
@@ -46,23 +46,23 @@ The Shanghai Composite Index is used to represent overall market sentiment and e
 
 ## Objectives
 
-1. **Data Acquisition:**
+1.**Data Acquisition:**
 
 - Gather labeled Chinese financial sentiment datasets from sources such as Github, Kaggle, and Hugging Face.
 - The sentiment labels are “Positive” (1), “Neutral” (0) and “Negative” (-1).
 
-2. **Model Development:**
+2.**Model Development:**
 
 - Use a Chinese pre-trained BERT model.
 - Augment the BERT model with a fully connected layer to output sentiment probability scores.
 - Fine-tune the model for 10 epochs on the labeled dataset.
 
-3. **Data Collection via Web Scraping:**
+3.**Data Collection via Web Scraping:**
 
 - Use Beautiful Soup to scrape posts and comments from EastMoney-Shanghai Securities Composite index (SSEC) forum吧 for the period from 2018/12/01 to 2025/01/01.
 - Apply the fine-tuned BERT model to each post/comment to obtain a sentiment score.
 
-4. **Sentiment Index Computation:**
+4.**Sentiment Index Computation:**
 
 - Employ a rolling window approach to compute a monthly sentiment index for the period 2019/01/01 to 2025/01/01.
 - For each month \( t \) (e.g., \( t \in \{\text{2019-01-01}, \dots, \text{2025-01-01}\} \)), use all posts/comments in the period \([t-1, t]\) to calculate:
@@ -92,12 +92,12 @@ The Shanghai Composite Index is used to represent overall market sentiment and e
 
  **Note:** We intentionally avoid using likes (denoted as \(\omega_i\)) for weighting the scores as they may originate from future periods and hence do not accurately capture the sentiment at time \( t \).
 
-5. **Predictive Modeling:**
+5.**Predictive Modeling:**
 
 - Incorporate the sentiment index as an additional factor in the regression model to forecast the next-day return of the index:
 
  \[
- r_{t+1} = \alpha + \sum_{i=1}^{n} \beta_i \, \text{factor}_{i,t} + \beta_{n+1} \, \text{index}_t + \epsilon_t
+ r_{t+1} = \hat{\alpha} + \sum_{i=1}^{n} \hat{\beta}_i \, \text{factor}_{i,t} + \hat{\beta}_{n+1} \, \text{index}_t + \hat{\epsilon}_t
  \]
 
  where:
@@ -108,12 +108,12 @@ The Shanghai Composite Index is used to represent overall market sentiment and e
 
  represents the return of the Shanghai Composite Index.
 
-6. **Investment Strategy & Backtesting:**
+6.**Investment Strategy & Backtesting:**
 
 - Use the regression model to predict returns:
 
  \[
- \hat{r}_{t+1} = \alpha + \sum_{i=1}^{n} \beta_i \, \text{factor}_{i,t} + \beta_{n+1} \, \text{index}_t
+ \hat{r}_{t+1} = \hat{\alpha} + \sum_{i=1}^{n} \hat{\beta}_i \, \text{factor}_{i,t} + \hat{\beta}_{n+1} \, \text{index}_t
  \]
 
 - **Trading Signal:**
@@ -147,7 +147,7 @@ The Shanghai Composite Index is used to represent overall market sentiment and e
 
 ---
 
-## Project Structure
+## Project Structure (assumed)
 
 ```
 Stock-Market-Sentiment-Analysis/
@@ -173,7 +173,7 @@ Stock-Market-Sentiment-Analysis/
 
 ## Installation
 
-1. **Clone the Repository:**
+1. **Clone the Repository:** (assumed)
 
  ```bash
  git clone https://github.com/your_username/Stock-Market-Sentiment-Analysis.git
@@ -195,7 +195,7 @@ Stock-Market-Sentiment-Analysis/
 
 ---
 
-## Usage
+## Usage (assumed)
 
 - **Data Preprocessing & Web Scraping:**
 
@@ -231,16 +231,16 @@ Aggregated using a rolling window method:
 The regression model:
 
 \[
-r_{t+1} = \alpha + \sum_{i=1}^{n} \beta_i\, \text{factor}_{i,t} + \beta_{n+1}\, \text{index}_t + \epsilon_t
+r_{t+1} = \hat{\alpha} + \sum_{i=1}^{n} \hat{\beta}_i\, \text{factor}_{i,t} + \hat{\beta}_{n+1}\, \text{index}_t + \hat{\epsilon}_t
 \]
 
-The inclusion of \(\text{index}_t\) is tested by its impact on the \( R^2 \) value and the significance of \(\beta_{n+1}\).
+The inclusion of \(\text{index}_t\) is tested by its impact on the \( R^2 \) value and the significance of \(\hat{\beta}_{n+1}\).
 
 - **Trading Strategy:**
 A simple rule-based strategy is implemented where, if:
 
 \[
-\hat{r}_{t+1} = \alpha + \sum_{i=1}^{n} \beta_i \, \text{factor}_{i,t} + \beta_{n+1} \, \text{index}_t > 0,
+\hat{r}_{t+1} = \hat{\alpha} + \sum_{i=1}^{n} \hat{\beta}_i \, \text{factor}_{i,t} + \hat{\beta}_{n+1} \, \text{index}_t > 0,
 \]
 
 then buy the index; otherwise, do not buy. Backtesting over the period 2025/01/02 to 2025/03/01 provides insights into the cumulative returns.
@@ -274,4 +274,4 @@ This project is licensed under the [MIT License](LICENSE).
 
 ## Contact
 
-For any questions or further information, please reach out to [your.email@example.com](mailto:your.email@example.com).
+For any questions or further information, please reach out to [@Kristyxyx](chm524@lehigh.com) or [@ZijianWang1125](ziw@524lehigh.edu).
