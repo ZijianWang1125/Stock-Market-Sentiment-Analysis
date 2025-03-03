@@ -180,7 +180,7 @@ Stock-Market-Sentiment-Analysis/
  cd Stock-Market-Sentiment-Analysis
  ```
 
-2. **Setup Virtual Environment and Install Dependencies:**
+2.**Setup Virtual Environment and Install Dependencies:**
 
  ```bash
  python -m venv venv
@@ -188,7 +188,7 @@ Stock-Market-Sentiment-Analysis/
  pip install -r requirements.txt
  ```
 
-3. **Download Additional Resources:**
+3.**Download Additional Resources:**
 
 - Ensure access to the necessary Chinese financial sentiment datasets.
 - Download the required pre-trained Chinese BERT model.
