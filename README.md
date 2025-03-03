@@ -69,7 +69,7 @@ The Shanghai Composite Index is used to represent overall market sentiment and e
 - For each comment \( i \):
 
  \[
- \text{score}_i = f_{\text{BERT}, \text{prob}}(comment_i)
+ \text{score}_i = f_{\text{BERT}, \text{prob}}(\text{comment}_i)
  \]
 
 - Positive sentiment sum:
