@@ -49,7 +49,7 @@ The Shanghai Composite Index is used to represent overall market sentiment and e
 1.**Data Acquisition:**
 
 - Gather labeled Chinese financial sentiment datasets from sources such as Github, Kaggle, and Hugging Face.
-- The sentiment labels are “Positive” (1), “Neutral” (0) and “Negative” (-1).
+- The sentiment labels are “Positive” (1), “Neutral” (0.5) and “Negative” (0).
 
 2.**Model Development:**
 
