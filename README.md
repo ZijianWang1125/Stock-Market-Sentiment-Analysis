@@ -47,72 +47,78 @@ The Shanghai Composite Index is used to represent overall market sentiment and e
 ## Objectives
 
 1. **Data Acquisition:**
- - Gather labeled Chinese financial sentiment datasets from sources such as Github, Kaggle, and Hugging Face.
- - The sentiment labels are “Positive” (1), “Neutral” (0) and “Negative” (-1).
+
+- Gather labeled Chinese financial sentiment datasets from sources such as Github, Kaggle, and Hugging Face.
+- The sentiment labels are “Positive” (1), “Neutral” (0) and “Negative” (-1).
 
 2. **Model Development:**
- - Use a Chinese pre-trained BERT model.
- - Augment the BERT model with a fully connected layer to output sentiment probability scores.
- - Fine-tune the model for 10 epochs on the labeled dataset.
+
+- Use a Chinese pre-trained BERT model.
+- Augment the BERT model with a fully connected layer to output sentiment probability scores.
+- Fine-tune the model for 10 epochs on the labeled dataset.
 
 3. **Data Collection via Web Scraping:**
- - Use Beautiful Soup to scrape posts and comments from EastMoney-Shanghai Securities Composite index (SSEC) forum吧 for the period from 2018/12/01 to 2025/01/01.
- - Apply the fine-tuned BERT model to each post/comment to obtain a sentiment score.
+
+- Use Beautiful Soup to scrape posts and comments from EastMoney-Shanghai Securities Composite index (SSEC) forum吧 for the period from 2018/12/01 to 2025/01/01.
+- Apply the fine-tuned BERT model to each post/comment to obtain a sentiment score.
 
 4. **Sentiment Index Computation:**
- - Employ a rolling window approach to compute a monthly sentiment index for the period 2019/01/01 to 2025/01/01.
- - For each month \( t \) (e.g., \( t \in \{\text{2019-01-01}, \dots, \text{2025-01-01}\} \)), use all posts/comments in the period \([t-1, t]\) to calculate:
- - For each comment \( i \):
- 
+
+- Employ a rolling window approach to compute a monthly sentiment index for the period 2019/01/01 to 2025/01/01.
+- For each month \( t \) (e.g., \( t \in \{\text{2019-01-01}, \dots, \text{2025-01-01}\} \)), use all posts/comments in the period \([t-1, t]\) to calculate:
+- For each comment \( i \):
+
  \[
  \text{score}_i = f_{\text{BERT}, \text{prob}}(comment_i)
  \]
- 
- - Positive sentiment sum:
- 
+
+- Positive sentiment sum:
+
  \[
  \text{pos}_t = \sum_{i=1}^{n_t} \text{score}_i
  \]
- 
- - Negative sentiment sum:
- 
+
+- Negative sentiment sum:
+
  \[
  \text{neg}_t = \sum_{i=1}^{n_t} \left(1-\text{score}_i\right)
  \]
- 
- - Sentiment index calculation:
- 
+
+- Sentiment index calculation:
+
  \[
  \text{index}_t = \ln\left(\frac{1+\text{pos}_t}{1+\text{neg}_t}\right)
  \]
- 
+
  **Note:** We intentionally avoid using likes (denoted as \(\omega_i\)) for weighting the scores as they may originate from future periods and hence do not accurately capture the sentiment at time \( t \).
 
 5. **Predictive Modeling:**
- - Incorporate the sentiment index as an additional factor in the regression model to forecast the next-day return of the index:
- 
+
+- Incorporate the sentiment index as an additional factor in the regression model to forecast the next-day return of the index:
+
  \[
  r_{t+1} = \alpha + \sum_{i=1}^{n} \beta_i \, \text{factor}_{i,t} + \beta_{n+1} \, \text{index}_t + \epsilon_t
  \]
- 
+
  where:
- 
+
  \[
  r_{t+1} = \frac{P_{t+1} - P_t}{P_t}
  \]
- 
+
  represents the return of the Shanghai Composite Index.
- 
+
 6. **Investment Strategy & Backtesting:**
- - Use the regression model to predict returns:
- 
+
+- Use the regression model to predict returns:
+
  \[
  \hat{r}_{t+1} = \alpha + \sum_{i=1}^{n} \beta_i \, \text{factor}_{i,t} + \beta_{n+1} \, \text{index}_t
  \]
- 
- - **Trading Signal:**
+
+- **Trading Signal:**
  If \(\hat{r}_{t+1} > 0\), then buy the index; otherwise, do not buy.
- - Evaluate the strategy by observing the cumulative return in the period 2025/01/02 to 2025/03/01 and check how the inclusion of the sentiment index impacts the model’s \( R^2 \).
+- Evaluate the strategy by observing the cumulative return in the period 2025/01/02 to 2025/03/01 and check how the inclusion of the sentiment index impacts the model’s \( R^2 \).
 
 ---
 
@@ -183,8 +189,9 @@ Stock-Market-Sentiment-Analysis/
  ```
 
 3. **Download Additional Resources:**
- - Ensure access to the necessary Chinese financial sentiment datasets.
- - Download the required pre-trained Chinese BERT model.
+
+- Ensure access to the necessary Chinese financial sentiment datasets.
+- Download the required pre-trained Chinese BERT model.
 
 ---
 
@@ -202,6 +209,7 @@ python scripts/calculate_index.py
 - **Model Training & Evaluation:**
 
 Navigate to the `notebooks` folder. Open and run:
+
 - `sentiment_analysis.ipynb` to fine-tune and evaluate the BERT model.
 - `backtesting.ipynb` for regression modeling, strategy design, and performance backtesting.
 
