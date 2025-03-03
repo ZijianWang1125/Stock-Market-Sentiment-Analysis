@@ -6,24 +6,26 @@
 
 ## Table of Contents
 
-- [Overview](#overview)
-- [Background & Motivation](#background--motivation)
-- [Objectives](#objectives)
-- [Project Workflow](#project-workflow)
-- [Project Structure](#project-structure)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Expected Results & Analysis](#expected-results--analysis)
-- [Discussion & Future Work](#discussion--future-work)
-- [Contributing](#contributing)
-- [License](#license)
-- [Contact](#contact)
+- [Stock Market Sentiment Analysis](#stock-market-sentiment-analysis)
+  - [Table of Contents](#table-of-contents)
+  - [Overview](#overview)
+  - [Background \& Motivation](#background--motivation)
+  - [Objectives](#objectives)
+  - [Project Workflow](#project-workflow)
+  - [Project Structure](#project-structure)
+  - [Installation](#installation)
+  - [Usage](#usage)
+  - [Expected Results \& Analysis](#expected-results--analysis)
+  - [Discussion \& Future Work](#discussion--future-work)
+  - [Contributing](#contributing)
+  - [License](#license)
+  - [Contact](#contact)
 
 ---
 
 ## Overview
 
-This project gathers labeled Chinese financial sentiment data, fine-tunes a BERT-based sentiment scoring model, and subsequently applies the model to extensive web-scraped forum posts from 东方财富网-上证指数吧. The derived sentiment scores are then aggregated into a monthly sentiment index which is used as an additional factor in a regression model to predict the next-day returns of the Shanghai Composite Index.
+This project gathers labeled Chinese financial sentiment data, fine-tunes a BERT-based sentiment scoring model, and subsequently applies the model to extensive web-scraped forum posts from EastMoney-Shanghai Securities Composite index (SSEC) forum吧. The derived sentiment scores are then aggregated into a monthly sentiment index which is used as an additional factor in a regression model to predict the next-day returns of the Shanghai Composite Index.
 
 ---
 
@@ -54,7 +56,7 @@ This project gathers labeled Chinese financial sentiment data, fine-tunes a BERT
    - Fine-tune the model for 10 epochs on the labeled dataset.
 
 3. **Data Collection via Web Scraping:**  
-   - Use Beautiful Soup to scrape posts and comments from 东方财富网-上证指数吧 for the period from 2018/12/01 to 2025/01/01.
+   - Use Beautiful Soup to scrape posts and comments from EastMoney-Shanghai Securities Composite index (SSEC) forum吧 for the period from 2018/12/01 to 2025/01/01.
    - Apply the fine-tuned BERT model to each post/comment to obtain a sentiment score.
 
 4. **Sentiment Index Computation:**  
@@ -123,7 +125,7 @@ This project gathers labeled Chinese financial sentiment data, fine-tunes a BERT
    Fine-tune a Chinese BERT model enhanced with a fully connected layer to output sentiment probabilities.
 
 3. **Web Scraping:**  
-   Utilize Beautiful Soup to scrape financial forum posts and comments from 东方财富网-上证指数吧 within the target date range.
+   Utilize Beautiful Soup to scrape financial forum posts and comments from EastMoney-Shanghai Securities Composite index (SSEC) forum吧 within the target date range.
 
 4. **Sentiment Calculation:**  
    For each piece of scraped text, compute a sentiment score using the fine-tuned BERT model.
@@ -145,7 +147,7 @@ This project gathers labeled Chinese financial sentiment data, fine-tunes a BERT
 Stock-Market-Sentiment-Analysis/
 ├── data/
 │   ├── raw/                 # Raw sentiment data from Github, Kaggle, Hugging Face
-│   ├── scraped/             # Scraped posts and comments from 东方财富网-上证指数吧
+│   ├── scraped/             # Scraped posts and comments from EastMoney-Shanghai Securities Composite index (SSEC) forum吧
 │   └── processed/           # Preprocessed datasets for model training & analysis
 ├── models/
 │   ├── bert_sentiment/      # Fine-tuned BERT model for sentiment scoring
