@@ -1,277 +1,105 @@
 # Stock Market Sentiment Analysis
 
-**Stock Market Sentiment Analysis** is a project that explores the relationship between online investor sentiment and stock market returns using advanced Natural Language Processing (NLP) techniques. In particular, the project leverages social media and forum posts to quantify investor sentiment and integrates this information into a predictive model for the Shanghai Composite Index.
+Investor sentiment plays a crucial role in influencing stock market movements, but capturing and quantifying real-time sentiment remains challenging. In this project, we developed a sentiment analysis pipeline by crawling 71,888 posts from Eastmoney’s Shanghai Composite Index forum. We fine-tuned a Chinese ELECTRA model to classify post sentiment into three categories and constructed a rolling sentiment index to track market emotions dynamically.
 
----
+## Project Structure
 
-## Table of Contents
+- `/data/electra_sentiment_chinese/`: Contains the Chinese sentiment analysis model and data
 
-- [Stock Market Sentiment Analysis](#stock-market-sentiment-analysis)
-  - [Table of Contents](#table-of-contents)
-  - [Overview](#overview)
-  - [Background \& Motivation](#background--motivation)
-  - [Objectives](#objectives)
-  - [Project Workflow](#project-workflow)
-  - [Project Structure (assumed)](#project-structure-assumed)
-  - [Installation](#installation)
-  - [Usage (assumed)](#usage-assumed)
-  - [Expected Results \& Analysis](#expected-results--analysis)
-  - [Discussion \& Future Work](#discussion--future-work)
-  - [Contributing](#contributing)
-  - [License](#license)
-  - [Contact](#contact)
+## Data Source
 
----
+- `train_data_1`: https://tianchi.aliyun.com/dataset/158814
+- `train_data_2`: https://tianchi.aliyun.com/dataset/179229
+- `train_data_3`: https://github.com/algosenses/Stock_Market_Sentiment_Analysis/blob/master/data/positive.txt
+- `train_data_4`: https://github.com/algosenses/Stock_Market_Sentiment_Analysis/blob/master/data/negative.txt
+- `test_data`: Scraped by `../script/data_test_scraper.py`.
 
-## Overview
 
-This project gathers labeled Chinese financial sentiment data, fine-tunes a BERT-based sentiment scoring model, and subsequently applies the model to extensive web-scraped forum posts from EastMoney-Shanghai Securities Composite index (SSEC) forum吧. The derived sentiment scores are then aggregated into a monthly sentiment index which is used as an additional factor in a regression model to predict the next-day returns of the Shanghai Composite Index.
+where
 
----
+- `train_data_1`: `./data/electra_sentiment_chinese/train_data/train_data_1.xlsx`
+- `train_data_2`: `./data/electra_sentiment_chinese/train_data/train_data_2.csv`
+- `train_data_3`: `..data/electra_sentiment_chinese/train_data/train_data_3.txt`
+- `train_data_4`: `./data/electra_sentiment_chinese/train_data/train_data_4.txt`
+- `test_data`: `./data/electra_sentiment_chinese/test_data/test_data.csv`
 
-## Background & Motivation
+## Enviroment
 
-- **Investor Sentiment Impact:**
-Investor emotions extracted from online posts significantly influence market behavior and can be key indicators of future market movements.
 
-- **Shanghai Composite Index as a Barometer:**
-The Shanghai Composite Index is used to represent overall market sentiment and economic health in China.
+## Setup and Installation
 
-- **Research Goals:**
-- Quantify investor sentiment using advanced NLP models.
-- Integrate sentiment indices with traditional financial indicators.
-- Leverage sentiment to enhance predictions of stock index returns and inform trading strategies.
-
----
-
-## Objectives
-
-1.**Data Acquisition:**
-
-- Gather labeled Chinese financial sentiment datasets from sources such as Github, Kaggle, and Hugging Face.
-- The sentiment labels are “Positive” (1), “Neutral” (0.5) and “Negative” (0).
-
-2.**Model Development:**
-
-- Use a Chinese pre-trained BERT model.
-- Augment the BERT model with a fully connected layer to output sentiment probability scores.
-- Fine-tune the model for 10 epochs on the labeled dataset.
-
-3.**Data Collection via Web Scraping:**
-
-- Use Beautiful Soup to scrape posts and comments from EastMoney-Shanghai Securities Composite index (SSEC) forum吧 for the period from 2018/12/01 to 2025/01/01.
-- Apply the fine-tuned BERT model to each post/comment to obtain a sentiment score.
-
-4.**Sentiment Index Computation:**
-
-- Employ a rolling window approach to compute a monthly sentiment index for the period 2019/01/01 to 2025/01/01.
-- For each month \( t \) (e.g., \( t \in \{\text{2019-01-01}, \dots, \text{2025-01-01}\} \)), use all posts/comments in the period \([t-1, t]\) to calculate:
-- For each comment \( i \):
-
- \[
- \text{score}_i = f_{\text{BERT}, \text{prob}}(\text{comment}_i)
- \]
-
-- Positive sentiment sum:
-
- \[
- \text{pos}_t = \sum_{i=1}^{n_t} \text{score}_i
- \]
-
-- Negative sentiment sum:
-
- \[
- \text{neg}_t = \sum_{i=1}^{n_t} \left(1-\text{score}_i\right)
- \]
-
-- Sentiment index calculation:
-
- \[
- \text{index}_t = \ln\left(\frac{1+\text{pos}_t}{1+\text{neg}_t}\right)
- \]
-
- **Note:** We intentionally avoid using likes (denoted as \(\omega_i\)) for weighting the scores as they may originate from future periods and hence do not accurately capture the sentiment at time \( t \).
-
-5.**Predictive Modeling:**
-
-- Incorporate the sentiment index as an additional factor in the regression model to forecast the next-day return of the index:
-
- \[
- r_{t+1} = \hat{\alpha} + \sum_{i=1}^{n} \hat{\beta}_i \, \text{factor}_{i,t} + \hat{\beta}_{n+1} \, \text{index}_t + \hat{\epsilon}_t
- \]
-
- where:
-
- \[
- r_{t+1} = \frac{P_{t+1} - P_t}{P_t}
- \]
-
- represents the return of the Shanghai Composite Index.
-
-6.**Investment Strategy & Backtesting:**
-
-- Use the regression model to predict returns:
-
- \[
- \hat{r}_{t+1} = \hat{\alpha} + \sum_{i=1}^{n} \hat{\beta}_i \, \text{factor}_{i,t} + \hat{\beta}_{n+1} \, \text{index}_t
- \]
-
-- **Trading Signal:**
- If \(\hat{r}_{t+1} > 0\), then buy the index; otherwise, do not buy.
-- Evaluate the strategy by observing the cumulative return in the period 2025/01/02 to 2025/03/01 and check how the inclusion of the sentiment index impacts the model’s \( R^2 \).
-
----
-
-## Project Workflow
-
-1. **Data Acquisition:**
- Gather labeled sentiment datasets (Positive, Neutral, Negative) for financial textual data from Github, Kaggle, and Hugging Face.
-
-2. **BERT Model Fine-Tuning:**
- Fine-tune a Chinese BERT model enhanced with a fully connected layer to output sentiment probabilities.
-
-3. **Web Scraping:**
- Utilize Beautiful Soup to scrape financial forum posts and comments from EastMoney-Shanghai Securities Composite index (SSEC) forum吧 within the target date range.
-
-4. **Sentiment Calculation:**
- For each piece of scraped text, compute a sentiment score using the fine-tuned BERT model.
-
-5. **Rolling Window Sentiment Index:**
- Aggregate sentiment scores over rolling monthly windows to compute the sentiment index using the formulas provided above.
-
-6. **Predictive Regression & Strategy Design:**
- Integrate the sentiment index into a regression model and design a trading strategy based on predicted returns.
-
-7. **Backtesting:**
- Evaluate the trading strategy’s performance during a specified period by comparing cumulative returns and looking at changes in the regression model performance.
-
----
-
-## Project Structure (assumed)
-
-```
-Stock-Market-Sentiment-Analysis/
-├── data/
-│ ├── raw/ # Raw sentiment data from Github, Kaggle, Hugging Face
-│ ├── scraped/ # Scraped posts and comments from EastMoney-Shanghai Securities Composite index (SSEC) forum吧
-│ └── processed/ # Preprocessed datasets for model training & analysis
-├── models/
-│ ├── bert_sentiment/# Fine-tuned BERT model for sentiment scoring
-│ └── regression_model/# Regression models incorporating financial factors and sentiment index
-├── notebooks/
-│ ├── data_exploration.ipynb # Exploratory data analysis of collected datasets
-│ ├── sentiment_analysis.ipynb # BERT fine-tuning and testing workflow
-│ └── backtesting.ipynb# Evaluation of the trading strategy and backtesting results
-├── scripts/
-│ ├── web_scraping.py# Script to crawl and extract data using Beautiful Soup
-│ └── calculate_index.py # Script to compute the monthly sentiment index from scraped data
-├── README.md# This file
-└── requirements.txt # List of project dependencies
-```
-
----
-
-## Installation
-
-1. **Clone the Repository:** (assumed)
-
- ```bash
- git clone https://github.com/your_username/Stock-Market-Sentiment-Analysis.git
- cd Stock-Market-Sentiment-Analysis
- ```
-
-2.**Setup Virtual Environment and Install Dependencies:**
-
- ```bash
- python -m venv venv
- source venv/bin/activate# On Windows: venv\Scripts\activate
- pip install -r requirements.txt
- ```
-
-3.**Download Additional Resources:**
-
-- Ensure access to the necessary Chinese financial sentiment datasets.
-- Download the required pre-trained Chinese BERT model.
-
----
-
-## Usage (assumed)
-
-- **Data Preprocessing & Web Scraping:**
-
-Run the following scripts to scrape data and compute the sentiment index:
+### 1. Clone the repository
 
 ```bash
-python scripts/web_scraping.py
-python scripts/calculate_index.py
+git clone https://github.com/yourusername/Stock-Market-Sentiment-Analysis1.git
+cd Stock-Market-Sentiment-Analysis1
 ```
 
-- **Model Training & Evaluation:**
+### 2. Set up the environment and activate
 
-Navigate to the `notebooks` folder. Open and run:
+- **venv**:
 
-- `sentiment_analysis.ipynb` to fine-tune and evaluate the BERT model.
-- `backtesting.ipynb` for regression modeling, strategy design, and performance backtesting.
+```bash
+python -m venv <venv>
 
----
+source <venv>/bin/activate
+```
 
-## Expected Results & Analysis
+- **conda**:
 
-- **Sentiment Scoring:**
-The fine-tuned BERT model outputs sentiment probabilities for each financial post/comment.
+```bash
+conda create <venv>
 
-- **Monthly Sentiment Index:**
-Aggregated using a rolling window method:
+conda activate <venv>
+```
 
-\[
-\text{index}_t = \ln\left(\frac{1+\text{pos}_t}{1+\text{neg}_t}\right)
-\]
+### 3. Install dependencies
 
-- **Predictive Regression:**
-The regression model:
+- **pip**:
 
-\[
-r_{t+1} = \hat{\alpha} + \sum_{i=1}^{n} \hat{\beta}_i\, \text{factor}_{i,t} + \hat{\beta}_{n+1}\, \text{index}_t + \hat{\epsilon}_t
-\]
+```bash
+pip install -r ./enviroment/requirements.txt
+```
 
-The inclusion of \(\text{index}_t\) is tested by its impact on the \( R^2 \) value and the significance of \(\hat{\beta}_{n+1}\).
+- **conda**:
 
-- **Trading Strategy:**
-A simple rule-based strategy is implemented where, if:
+```bash
+conda install -r ./enviroment/requirements.txt
+```
 
-\[
-\hat{r}_{t+1} = \hat{\alpha} + \sum_{i=1}^{n} \hat{\beta}_i \, \text{factor}_{i,t} + \hat{\beta}_{n+1} \, \text{index}_t > 0,
-\]
+## Usage
 
-then buy the index; otherwise, do not buy. Backtesting over the period 2025/01/02 to 2025/03/01 provides insights into the cumulative returns.
+You can either repeat the training pipeline (to predict the sentiment using the texts from `test_data`) or predict the sentiment of a Chinese sentence input.
 
----
+### 1. Train a model
 
-## Discussion & Future Work
+To train a model by yourself, simply execute the [`main.py`]().
 
-- **Comparison with Existing Solutions:**
-- Traditional sentiment analysis often relies on lexicon-based methods or delayed market signals (e.g., likes/upvotes).
-- Our method utilizes real-time textual sentiment from financial forums, avoiding biases introduced by future engagement metrics.
+### 2. Predict a sentence
 
-- **Improvements & New Perspectives:**
-- Experiment with alternative weighting schemes or credibility scores to enhance sentiment aggregation.
-- Integrate additional financial indicators and explore advanced deep learning architectures.
-- Compare our approach with other state-of-the-art methods to further validate performance.
+To input a Chinese sentence about financial or economical topics, and predict the sentiment of it by the model:
 
----
+- 1. **Unzip Model**: Download the [electra_sentiment_chinese.rar](https://drive.google.com/file/d/1tbCgXhmZKg1YwxcStiXLL7p62cwXZ9P2/view?usp=drive_link) and unzip it under `./model/electra_sentiment_chinese`
+- 2. **Unzip Data**: Download the [data.rar](https://drive.google.com/file/d/1Ahe7L4D7Dd959I7F31zxbFSVc-oxwDdq/view?usp=drive_link) and unzip it under `./model/electra_sentiment_chinese`
+- 2. Second, execute ['model_finetuner.predict_sentiment']().
 
-## Contributing
+## Results
 
-Contributions are welcome! If you have any suggestions, improvements, or bug fixes, please submit an issue or pull request.
+The sentiment analysis model classifies text into three categories:
+- Positive: Indicating optimistic market sentiment
+- Neutral: Indicating balanced or uncertain market views
+- Negative: Indicating pessimistic market sentiment
 
----
+Example analysis of recent market news:
+
+| Date       | Source         | Text                           | Sentiment | Confidence |
+| ---------- | -------------- | ------------------------------ | --------- | ---------- |
+| 2023-04-15 | Financial News | 经济数据好于预期，市场上涨     | Positive  | 0.89       |
+| 2023-04-16 | Social Media   | 投资者对新政策持观望态度       | Neutral   | 0.75       |
+| 2023-04-17 | Market Forum   | 通胀数据令人担忧，可能引发抛售 | Negative  | 0.82       |
 
 ## License
 
-This project is licensed under the [MIT License](LICENSE).
+MIT License
 
----
-
-## Contact
-
-For any questions or further information, please reach out to [@Kristyxyx](chm524@lehigh.com) or [@ZijianWang1125](ziw@524lehigh.edu).
+Copyright (c) 2023 Stock Market Sentiment Analysis Project
