@@ -8,7 +8,7 @@ Key files based on different [Usage](#usage) have sturcture like:
 
 ```
 .
-├── data/ # Data files for usage: "Train a model" only
+├── data/ # Data files for usage: "Train a model to predict whole test data" only
 │   └── electra_sentiment_chinese/
 │       ├── train_data/           # Training datasets from various sources
 │       │   ├── train_data_1.xlsx # Dataset from Alibaba Tianchi
@@ -20,7 +20,7 @@ Key files based on different [Usage](#usage) have sturcture like:
 │       │   ├── test_data.csv     # Raw scraped test data
 │       │   └── test_data_clean.csv # Processed test data
 │       └── pred_data/            # Output directory for prediction results
-├── model/ # Fine-tuned Chinese ELECTRA model files for usage: "Predict comments for sentiments" only
+├── model/ # Fine-tuned Chinese ELECTRA model files for usage: "Use trained model to predict several comments" only
 │   └── electra_sentiment_chinese/
 │       ├── config.json           # Model configuration
 │       ├── model.safetensors     # Model weights
@@ -42,24 +42,13 @@ Key files based on different [Usage](#usage) have sturcture like:
 
 ## Data Source
 
-After finishing the **Unzip** step in [Train a model](#train-a-model) part, you will be able to find several datasets in `./data`. Here are their sources and locations:
-
-### Source
+After finishing the **Unzip** step in [Train a model to predict whole test data](#train-a-model) part, you will be able to find several datasets in `./data/train_data` or `./data/test_data`. Here are their sources:
 
 - `train_data_1`: https://tianchi.aliyun.com/dataset/158814
 - `train_data_2`: https://tianchi.aliyun.com/dataset/179229
 - `train_data_3`: https://github.com/algosenses/Stock_Market_Sentiment_Analysis/blob/master/data/positive.txt
 - `train_data_4`: https://github.com/algosenses/Stock_Market_Sentiment_Analysis/blob/master/data/negative.txt
 - `test_data`: Scraped by `../script/data_test_scraper.py`.
-
-
-### Location
-
-- `train_data_1`: `./data/electra_sentiment_chinese/train_data/train_data_1.xlsx`
-- `train_data_2`: `./data/electra_sentiment_chinese/train_data/train_data_2.csv`
-- `train_data_3`: `..data/electra_sentiment_chinese/train_data/train_data_3.txt`
-- `train_data_4`: `./data/electra_sentiment_chinese/train_data/train_data_4.txt`
-- `test_data`: `./data/electra_sentiment_chinese/test_data/test_data.csv`
 
 ## Enviroment
 
@@ -98,22 +87,22 @@ conda activate <venv>
 - **pip**:
 
 ```bash
-pip install -r ./enviroment/requirements.txt
+pip install -r ./requirements.txt
 ```
 
 - **conda**:
 
 ```bash
-conda install -r ./enviroment/requirements.txt
+conda install -r ./requirements.txt
 ```
 
 ## Usage
 
-You can either repeat the training pipeline (to predict the sentiment using the comments from `test_data`) or predict the sentiment of a Chinese comment input.
+You can either repeat the training pipeline to predict the sentiment using the comments from `./data/test_data` or use a trained model to predict the sentiment of several Chinese comments.
 
-### Train a model
+### Train a model to predict whole test data
 
-To train a model by yourself:
+To Train a model to predict whole test data by yourself:
 
 1. **Download**: Download the `data.rar` in [Google Drive](https://drive.google.com/drive/folders/1XJNfichk1kVdcaTAptdlns2KVjW8eKPN?dmr=1&ec=wgc-drive-hero-goto).
 
@@ -121,9 +110,9 @@ To train a model by yourself:
 
 3. **Execute**: Execute [`main.py`](https://github.com/ZijianWang1125/Stock-Market-Sentiment-Analysis/blob/main/script/main.py) and you will be given a model trained by yourself in `./model/electra_sentiment_chinese` and a predicted dataset in `./data/electra_sentiment_chinese/pred_data` based on a testing dataset in `./data/electra_sentiment_chinese/test_data/test_data_clean.csv`.
 
-### Predict comments for sentiments
+### Use trained model to predict several comments
 
-To input a Chinese comment about financial or economical topics, and predict the sentiment of it by the model:
+To use trained model to predict several comments:
 
 1. **Download**: Download the `data.rar` and `model.rar` in [Google Drive](https://drive.google.com/drive/folders/1XJNfichk1kVdcaTAptdlns2KVjW8eKPN?dmr=1&ec=wgc-drive-hero-goto).
 
@@ -134,13 +123,14 @@ To input a Chinese comment about financial or economical topics, and predict the
 ## Results
 
 The sentiment analysis model classifies comment into three categories:
-- Positive: Indicating optimistic market sentiment
-- Neutral: Indicating balanced or uncertain market views
-- Negative: Indicating pessimistic market sentiment
+
+- Positive: Indicating optimistic market sentiment with sentiment value of **2**
+- Neutral: Indicating balanced or uncertain market views with sentiment value of **1**
+- Negative: Indicating pessimistic market sentiment with sentiment value of **0**
 
 Here are different results example for different usages:
 
-- Example sentiment analysis of market comments in [Predict comments for sentiments](#predict-comments-for-sentiments) part:
+- Example sentiment analysis of market comments in [Train a model to predict whole test data](#train-a-model-to-predict-whole-test-data) part:
 
   | User Age | Comment # | Influecen Power | Read # |           Comment           |    Data    | Sentiment Value | Confidence | Weighted Sentiment Value |
   | :------: | :-------: | :-------------: | :----: | :-------------------------: | :--------: | :-------------: | :--------: | :----------------------: |
@@ -148,7 +138,7 @@ Here are different results example for different usages:
   |   0.04   |     0     |       0.5       |  200   |       科创板融资问题        | 2019-03-28 |        2        |    0.65    |           1.58           |
   |   0.25   |     0     |       1.0       |  574   | 缩量都能把股指拉红神勇的大A | 2019-03-27 |        2        |    0.73    |           1.59           |
 
-- Example sentiment analysis of market comments in [Predict comments for sentiments](#predict-comments-for-sentiments) part:
+- Example sentiment analysis of market comments in [Use trained model to predict several comments](#use-trained-model-to-predict-several-comments) part:
 
   |            Comment             | Sentiment | Confidence | Weighted Sentiment |
   | :----------------------------: | :-------: | :--------: | :----------------: |
@@ -160,4 +150,4 @@ Here are different results example for different usages:
 
 MIT License
 
-Copyright (c) 2023 Stock Market Sentiment Analysis Project
+Copyright (c) 2025 Stock Market Sentiment Analysis Project
