@@ -213,22 +213,27 @@ if __name__ == "__main__":
             models_path
         )
 
+    n_titles = int(input("Enter the number of sentences to predict sentiment: "))
+    if n_titles <= 0:
+        print("Invalid number of sentences. Exiting.")
+        exit()
+
     # Test the fine-tuned model
     test_titles = [
-        "这部电影真的很棒，我非常喜欢！",
-        "服务态度一般，不算好也不算差。",
-        "产品质量太差了，完全不值这个价格。"
+        input(f"Enter sentence #{i} to predict sentiment: ") for i in range(n_titles)
     ]
 
     # Create a DataFrame with test titles
     test_df = pd.DataFrame({'title': test_titles})
-    
+
     # Predict sentiment
     pred_df = predict_sentiment(model, tokenizer, test_df)
 
-    print("\nPrediction results:")
+    print("\nSentiment Analysis:")
     for i, row in pred_df.iterrows():
-        emotion_label = "negative" if row['emotion'] == -1 else "neutral" if row['emotion'] == 0 else "positive"
-        print(f"Title: {row['title']}")
-        print(f"Emotion: {emotion_label} (Sentiment value: {row['emotion']})")
-        print("")
+        title = row['title']
+        emotion = row['emotion']
+        emotion_label = "negative" if emotion == -1 else "neutral" if emotion == 0 else "positive"
+        print(f"Title: {title}")
+        confidence = 1 - abs(emotion) if emotion_label == "neutral" else abs(emotion)
+        print(f"Sentiment: {emotion_label} (Confidence: {confidence:.4f})\n")
