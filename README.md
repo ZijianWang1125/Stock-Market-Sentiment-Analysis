@@ -25,11 +25,8 @@ where
 
 ## Enviroment
 
-<<<<<<< HEAD
 See `enviroment\requirements.txt`.
-=======
-See `\enviroment\requirement.txt`
->>>>>>> fa29d571015b5dbbad051b83235facedcfcb50d8
+
 
 ## Setup and Installation
 
