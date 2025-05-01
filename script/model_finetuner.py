@@ -1,10 +1,12 @@
 # %%
 import pandas as pd
+import numpy as np
 import torch
-from transformers import ElectraTokenizer, ElectraForSequenceClassification, Trainer, TrainingArguments, EarlyStoppingCallback
+from transformers import ElectraTokenizer, ElectraForSequenceClassification, Trainer, TrainingArguments#, EarlyStoppingCallback
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, precision_recall_fscore_support
 from data_train_loader import load_train_data
+from model_predictor import predict_sentiment
 
 random_state = 42
 
@@ -23,7 +25,7 @@ class SentimentDataset(torch.utils.data.Dataset):
     def __len__(self):
         return len(self.labels)
 
-# 3. Fine-tuning function
+# Fine-tuning function
 def finetune_chinese_electra_for_sentiment(
     train_df,
     output_dir
@@ -149,39 +151,6 @@ def finetune_chinese_electra_for_sentiment(
     
     return model, tokenizer
 
-# 4. Using the fine-tuned model for prediction
-def predict_sentiment(model, tokenizer, test_df):
-    device = next(model.parameters()).device
-    
-    # Create result lists
-    emotions = []
-    
-    # Process each title
-    for title in test_df['title']:
-        inputs = tokenizer(
-            title,
-            return_tensors="pt",
-            truncation=True,
-            max_length=128,
-            padding=True
-        )
-        # Move inputs to the model's device
-        inputs = {k: v.to(device) for k, v in inputs.items()}
-
-        with torch.no_grad():
-            outputs = model(**inputs)
-        
-        logits = outputs.logits
-        emotion = torch.argmax(logits, dim=1).item()
-        
-        emotions.append(emotion)
-    
-    # Create results DataFrame
-    pred_df = test_df
-    pred_df['emotion'] = emotions
-    
-    return pred_df
-
 
 # %%
 if __name__ == "__main__":
@@ -233,7 +202,11 @@ if __name__ == "__main__":
     for i, row in pred_df.iterrows():
         title = row['title']
         emotion = row['emotion']
-        emotion_label = "negative" if emotion == -1 else "neutral" if emotion == 0 else "positive"
-        print(f"Title: {title}")
-        confidence = 1 - abs(emotion) if emotion_label == "neutral" else abs(emotion)
-        print(f"Sentiment: {emotion_label} (Confidence: {confidence:.4f})\n")
+        emotion_label = "negative" if emotion == 0 else "neutral" if emotion == 1 else "positive"
+        confidence = row['confidence']
+        weighted_emotions = row['weighted_emotions']
+        weighted_emotions_label = "negative" if weighted_emotions < 0.5 else "neutral" if weighted_emotions == 0.5 else "positive"
+
+        print(f"Sentence: {title}")
+        print(f"Sentiment: {emotion_label} (Confidence: {confidence:.4f})")
+        print(f"Weighted Sentiment: {weighted_emotions_label}\n")

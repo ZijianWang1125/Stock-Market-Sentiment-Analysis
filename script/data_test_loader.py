@@ -56,7 +56,7 @@ def load_test_data(test_csv_path):
     test_df['read_n'] = test_df['read_n'].astype('int16')
     test_df_clean = test_df
 
-    return test_df
+    return test_df_clean
 
 # %%
 if __name__ == "__main__":
