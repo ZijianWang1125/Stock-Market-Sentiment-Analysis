@@ -25,6 +25,7 @@ where
 
 ## Enviroment
 
+See `enviroment\requirements.txt`.
 
 ## Setup and Installation
 
@@ -79,9 +80,11 @@ To train a model by yourself, simply execute the [`main.py`]().
 
 To input a Chinese sentence about financial or economical topics, and predict the sentiment of it by the model:
 
-- 1. **Unzip Model**: Download the [electra_sentiment_chinese.rar](https://drive.google.com/file/d/1tbCgXhmZKg1YwxcStiXLL7p62cwXZ9P2/view?usp=drive_link) and unzip it under `./model/electra_sentiment_chinese`
-- 2. **Unzip Data**: Download the [data.rar](https://drive.google.com/file/d/1Ahe7L4D7Dd959I7F31zxbFSVc-oxwDdq/view?usp=drive_link) and unzip it under `./model/electra_sentiment_chinese`
-- 2. Second, execute ['model_finetuner.predict_sentiment']().
+- 1. **Download**: Download the `data.rar` and `model.rar` in [Google Drive](https://drive.google.com/drive/folders/1XJNfichk1kVdcaTAptdlns2KVjW8eKPN?dmr=1&ec=wgc-drive-hero-goto).
+
+- 2. **Unzip**: Unzip the `data.rar` and `model.rar` in root directory `./`.
+
+- 3. **Execute**: Execute ['model_finetuner.predict_sentiment'](https://github.com/ZijianWang1125/Stock-Market-Sentiment-Analysis/blob/main/script/model_finetuner.py) and you will be required to input a Chinese sentence about stock topics. After inputting, you will be given a sentiment analysis for that sentence.
 
 ## Results
 
