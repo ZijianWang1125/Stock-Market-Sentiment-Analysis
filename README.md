@@ -25,7 +25,7 @@ where
 
 ## Enviroment
 
-See `\enviroment\enviroment.txt`
+See `\enviroment\requirement.txt`
 
 ## Setup and Installation
 
