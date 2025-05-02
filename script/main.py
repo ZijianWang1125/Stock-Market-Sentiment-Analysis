@@ -6,7 +6,7 @@ from transformers import ElectraTokenizer, ElectraForSequenceClassification
 from model_finetuner import finetune_chinese_electra_for_sentiment
 from model_predictor import predict_sentiment
 from data_test_loader import load_test_data
-from data_test_scraper import scrape_test_data
+from data_test_crawler import crawl_test_data
 
 def main():
     device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -51,7 +51,7 @@ def main():
             test_df_clean.to_csv(test_csv_clean_path, index=False)
             print(f"Test data cleaned and saved to {test_csv_clean_path}")
         except:
-            test_df = scrape_test_data()
+            test_df = crawl_test_data()
             test_df.to_csv(test_csv_clean_path, index=False)
             test_df_clean = load_test_data(test_csv_path)
             test_df_clean.to_csv(test_csv_clean_path, index=False)

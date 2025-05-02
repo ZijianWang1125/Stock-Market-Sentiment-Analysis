@@ -182,14 +182,14 @@ if __name__ == "__main__":
             models_path
         )
 
-    n_titles = int(input("Enter the number of sentences to predict sentiment: "))
+    n_titles = int(input("Enter the number of comments to predict sentiment: "))
     if n_titles <= 0:
-        print("Invalid number of sentences. Exiting.")
+        print("Invalid number of comments. Exiting.")
         exit()
 
     # Test the fine-tuned model
     test_titles = [
-        input(f"Enter sentence #{i} to predict sentiment: ") for i in range(n_titles)
+        input(f"Enter comment #{i} to predict sentiment: ") for i in range(n_titles)
     ]
 
     # Create a DataFrame with test titles
@@ -207,6 +207,6 @@ if __name__ == "__main__":
         weighted_emotions = row['weighted_emotions']
         weighted_emotions_label = "negative" if weighted_emotions < 0.5 else "neutral" if weighted_emotions == 0.5 else "positive"
 
-        print(f"Sentence: {title}")
+        print(f"Comment: {title}")
         print(f"Sentiment: {emotion_label} (Confidence: {confidence:.4f})")
         print(f"Weighted Sentiment: {weighted_emotions_label}\n")

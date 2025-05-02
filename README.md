@@ -28,12 +28,12 @@ Key files based on different [Usage](#usage) have sturcture like:
 │       ├── tokenizer_config.json # Tokenizer configuration
 │       └── vocab.txt             # Model vocabulary
 ├── script/
+│   ├── data_test_loader.py       # Formatter to the test data: `./data/electra_sentiment_chinese/test_data`
+│   ├── data_test_crawler.py       # Crawler to the test data: `./data/electra_sentiment_chinese/test_data`
+│   ├── data_train_loader.py       # Formatter to the train data: `./data/electra_sentiment_chinese/train_data`
 │   ├── main.py                   # Main script for training and evaluating the model
 │   ├── model_finetuner.py        # Script for fine-tuning the ELECTRA model
-│   ├── model_predictor.py        # Script for predicting sentiment of input comments
-│   ├── data_processor.py         # Script for preprocessing and cleaning data
-│   ├── data_test_scraper.py      # Script for scraping test data from Eastmoney forums
-│   └── visualization.py          # Script for visualizing sentiment analysis results
+│   └── model_predictor.py        # Script for predicting sentiment of input 
 │
 │
 └── README.md                     # Project documentation

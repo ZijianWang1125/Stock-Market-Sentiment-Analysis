@@ -5,8 +5,8 @@ import pandas as pd
 import time
 import random
 
-def scrape_page(url):
-    """Scrape a single page and extract post data"""
+def crawl_page(url):
+    """Crawl a single page and extract post data"""
     data = []
     try:
         response = requests.get(url, timeout=10)
@@ -87,7 +87,7 @@ def save_data(data, output_path):
     df.to_csv(output_path, index=False, encoding='utf-8-sig')
     return df
 
-def scrape_test_data(
+def crawl_test_data(
     start_page=1,
     end_page=100,
     save_interval=1000, 
@@ -102,7 +102,7 @@ def scrape_test_data(
         url = base_url.format(page)
         print(f'Crawling page {page}...')
         
-        page_data = scrape_page(url)
+        page_data = crawl_page(url)
         data.extend(page_data)
         post_counter += len(page_data)
         
@@ -124,7 +124,7 @@ def scrape_test_data(
 if __name__ == '__main__':
     
     # Call the main function
-    df = scrape_test_data()
+    df = crawl_test_data()
     df.to_csv(r"../data/electra_sentiment_chinese/test_data/test_data.csv", index=False, encoding='utf-8-sig')
 
 # %%
