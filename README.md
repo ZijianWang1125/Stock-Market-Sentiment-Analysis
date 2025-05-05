@@ -33,9 +33,7 @@ Key files based on different [Usage](#usage) have sturcture like:
 │   ├── data_train_loader.py       # Formatter to the train data: `./data/electra_sentiment_chinese/train_data`
 │   ├── main.py                   # Main script for training and evaluating the model
 │   ├── model_finetuner.py        # Script for fine-tuning the ELECTRA model
-│   └── model_predictor.py        # Script for predicting sentiment of input 
-│
-│
+│   └── model_predictor.py        # Script for predicting sentiment of input │
 └── README.md                     # Project documentation
 └── requirements.txt              # Dependencies for the project
 ```
@@ -52,7 +50,7 @@ After finishing the **Unzip** step in [Train model to predict whole test data](#
 
 ## Enviroment
 
-See `.\requirements.txt`.
+See `requirements.txt` for a list of necessary Python packages.
 
 
 ## Setup and Installation
@@ -66,34 +64,27 @@ cd Stock-Market-Sentiment-Analysis1
 
 ### 2. Set up the environment and activate
 
-- **venv**:
+Choose either `venv` or `conda`:
 
-```bash
-python -m venv <venv>
+*   **venv**:
+    ```bash
+    python -m venv venv
+    # On Windows
+    .\venv\Scripts\activate
+    # On macOS/Linux
+    source venv/bin/activate
+    ```
 
-source <venv>/bin/activate
-```
-
-- **conda**:
-
-```bash
-conda create <venv>
-
-conda activate <venv>
-```
+*   **conda**:
+    ```bash
+    conda create --name risk_env python=3.9 # Or desired Python version
+    conda activate risk_env
+    ```
 
 ### 3. Install dependencies
 
-- **pip**:
-
 ```bash
 pip install -r ./requirements.txt
-```
-
-- **conda**:
-
-```bash
-conda install -r ./requirements.txt
 ```
 
 ## Usage
@@ -104,7 +95,7 @@ You can either repeat the training pipeline to predict the sentiment using the c
 
 To train model to predict whole test data by yourself:
 
-1. **Download**: Download the `data.rar` in [Google Drive](https://drive.google.com/drive/folders/1XJNfichk1kVdcaTAptdlns2KVjW8eKPN?dmr=1&ec=wgc-drive-hero-goto).
+1. **Download**: Download the `data.rar` in [Google Drive](https://drive.google.com/file/d/1OKVXTAq2P8ucE6wDyY_a4c9nYJSGOSuD/view?usp=sharing).
 
 2. **Unzip**: Unzip the `data.rar` in root directory `./`.
 
@@ -114,9 +105,9 @@ To train model to predict whole test data by yourself:
 
 To use trained model to predict several input comments:
 
-1. **Download**: Download the and `model.rar` in [Google Drive](https://drive.google.com/drive/folders/1XJNfichk1kVdcaTAptdlns2KVjW8eKPN?dmr=1&ec=wgc-drive-hero-goto).
+1. **Download**: Download the `model.rar` in [Google Drive](https://drive.google.com/file/d/1_zjliGZdjHmbQFrZnORcw9wE1TfqEWTc/view?usp=sharing).
 
-2. **Unzip**: Unzip the and `model.rar` in root directory `./`.
+2. **Unzip**: Unzip the `model.rar` in root directory `./`.
 
 3. **Execute**: Execute [`model_predictor`](https://github.com/ZijianWang1125/Stock-Market-Sentiment-Analysis/blob/main/script/model_finetuner.py) and you will be required to input Chinese comments about stock topics in your desired quantity. After inputting, you will be given a sentiment analysis for these comments.
 
